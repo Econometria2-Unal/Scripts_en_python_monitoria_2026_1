@@ -88,12 +88,13 @@ pd.Series(yt1n).plot(ax=axes[0,0], title='Serie ARIMA(1,1,0) - No Estacionaria',
 plot_acf(yt1n, lags=20, ax=axes[0,1], title='ACF ARIMA(1,1,0)')
 plot_pacf(yt1n, lags=20, ax=axes[1,0], title='PACF ARIMA(1,1,0)')
 
-# Diferenciación
+#%% Diferenciación
 diff_yt1n = pd.Series(np.diff(yt1n))
-diff_yt1n.plot(ax=axes[1,1], title='1ra Diferencia - Estacionaria', 
-               color='turquoise', linewidth=0.5)
-plt.tight_layout()
-plt.show()
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+pd.Series(diff_yt1n).plot(ax=axes[0,0], title='Serie ARIMA(1,1,0) - No Estacionaria', 
+                     color='darkblue', linewidth=0.5)
+plot_acf(diff_yt1n, lags=20, ax=axes[0,1], title='ACF ARIMA(1,1,0)')
+plot_pacf(diff_yt1n, lags=20, ax=axes[1,0], title='PACF ARIMA(1,1,0)')
 
 #%% Simulación de un proceso AR(2) estacionario ARIMA(2,0,0)
 print("4. PROCESO AR(2) ESTACIONARIO - ARIMA(2,0,0)")
