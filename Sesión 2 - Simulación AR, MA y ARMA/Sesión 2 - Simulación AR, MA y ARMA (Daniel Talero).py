@@ -61,7 +61,7 @@ plt.show()
 #%% Simulación de un proceso AR(1) estacionario ARIMA(1,0,0)
 print("2. PROCESO AR(1) ESTACIONARIO - ARIMA(1,0,0)")
 np.random.seed(1)
-ar1 = np.array([1, -0.6])  # φ₁=0.6 (estacionariedad)
+ar1 = np.array([1,-0.6])  # φ₁=0.6 (estacionariedad)
 ma1 = np.array([1])
 arma_process1s = ArmaProcess(ar1, ma1)
 yt1s = arma_process1s.generate_sample(nsample=obs)
@@ -77,7 +77,7 @@ plt.show()
 #%% Simulación de un proceso AR(1) no estacionario ---- ARIMA(1,1,0)
 print("3. PROCESO AR(1) NO ESTACIONARIO - ARIMA(1,1,0)")
 np.random.seed(1)
-ar1n = np.array([1, -0.5])
+ar1n = np.array([1, -0.6])
 ma1n = np.array([1])
 arma_process1n = ArmaProcess(ar1n, ma1n)
 yt1n = arma_process1n.generate_sample(nsample=obs).cumsum()  # Integración d=1
@@ -197,5 +197,48 @@ print("""
 • SIEMPRE complementar gráficos con pruebas formales (Dickey-Fuller, etc.)
 """)
 
+
+#%% Comparación directa AR(1): estacionario vs no estacionario SIN cumsum()
+print("10. COMPARACIÓN AR(1) SIN INTEGRACIÓN")
+
+np.random.seed(123)
+
+# φ = 0.6 (estacionario)
+ar_est = np.array([1, -0.6])
+ma = np.array([1])
+process_est = ArmaProcess(ar_est, ma)
+y_est = process_est.generate_sample(nsample=obs)
+
+# φ = 1 (raíz unitaria)
+ar_unit = np.array([1, -1.0])
+process_unit = ArmaProcess(ar_unit, ma)
+y_unit = process_unit.generate_sample(nsample=obs)
+
+# φ = 1.2 (explosivo)
+ar_exp = np.array([1, -1.2])
+process_exp = ArmaProcess(ar_exp, ma)
+y_exp = process_exp.generate_sample(nsample=obs)
+
+# Gráficos
+fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+
+# --- φ = 0.6 ---
+pd.Series(y_est).plot(ax=axes[0,0], title='AR(1) φ=0.6 (Estacionario)')
+plot_acf(y_est, lags=20, ax=axes[0,1])
+plot_pacf(y_est, lags=20, ax=axes[0,2])
+
+# --- φ = 1 ---
+pd.Series(y_unit).plot(ax=axes[1,0], title='AR(1) φ=1 (Raíz unitaria)')
+plot_acf(y_unit, lags=20, ax=axes[1,1])
+plot_pacf(y_unit, lags=20, ax=axes[1,2])
+
+# --- φ = 1.2 ---
+pd.Series(np.abs(y_exp)).plot(ax=axes[2,0])
+axes[2,0].set_yscale('log')
+plot_acf(y_exp, lags=20, ax=axes[2,1])
+plot_pacf(y_exp, lags=20, ax=axes[2,2])
+
+plt.tight_layout()
+plt.show()
 
 # %%

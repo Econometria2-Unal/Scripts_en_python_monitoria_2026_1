@@ -68,7 +68,7 @@ np.random.seed(11)  # Fijar semilla para reproducibilidad
 # En statsmodels, los coeficientes AR se pasan con signo invertido.
 # Si el modelo es: y_t = 0.5 y_{t-1} + e_t
 # Entonces debemos escribir: [1, -0.5]
-ar_params = np.array([1, -0.5])
+ar_params = np.array([1, -0,5])
 
 # No hay componente MA
 ma_params = np.array([1])
